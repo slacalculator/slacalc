@@ -1,15 +1,16 @@
 function calculate() {
-  // Get the selected period values from checkboxes
-  const checkboxes = document.querySelectorAll('#periodsDropdown input[type="checkbox"]:checked');
-  const periodValues = Array.from(checkboxes).map(checkbox => parseInt(checkbox.value));
+  // Get the selected period value
+  const periodSelect = document.getElementById("period");
+  const periodValue = periodSelect.options[periodSelect.selectedIndex].value;
   
   // Get the total downtime value
   const downtimeInput = document.getElementById("downtime");
-  const downtimeValue = parseInt(downtimeInput.value);
+  const downtimeValue = downtimeInput.value;
   
   // Calculate the total uptime percentage
-  const totalMinutes = periodValues.reduce((sum, value) => sum + value, 0);
-  const uptimePercentage = ((totalMinutes - downtimeValue) / totalMinutes) * 100;
+  const totalMinutes = parseInt(periodValue);
+  const totalDowntime = parseInt(downtimeValue);
+  const uptimePercentage = ((totalMinutes - totalDowntime) / totalMinutes) * 100;
   
   // Display the result
   const resultElement = document.getElementById("output");
@@ -17,15 +18,15 @@ function calculate() {
 }
 
 function updatePeriodOptions() {
-  // Get the dropdown content element for periods
-  const periodsDropdown = document.getElementById("periodsDropdown");
+  // Get the select element for periods
+  const periodSelect = document.getElementById("period");
   
   // Clear the current options
-  periodsDropdown.innerHTML = "";
+  periodSelect.innerHTML = "";
   
   // Get the selected period type (Quarter or Month)
   const periodTypeSelect = document.getElementById("periodType");
-  const periodType = periodTypeSelect.value;
+  const periodType = periodTypeSelect.options[periodTypeSelect.selectedIndex].value;
   
   // Define the number of minutes in each month (non-leap year and leap year)
   const months = {
@@ -58,23 +59,17 @@ function updatePeriodOptions() {
   // Add options based on the selected period type
   if (periodType === "Quarter") {
     for (const [quarter, values] of Object.entries(quarters)) {
-      const label = document.createElement("label");
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.value = isLeapYear ? values.leap : values.normal;
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(quarter + (isLeapYear ? " (leap year)" : "")));
-      periodsDropdown.appendChild(label);
+      const option = document.createElement("option");
+      option.value = isLeapYear ? values.leap : values.normal;
+      option.text = quarter + (isLeapYear ? " (leap year)" : "");
+      periodSelect.add(option);
     }
   } else if (periodType === "Month") {
     for (const [month, values] of Object.entries(months)) {
-      const label = document.createElement("label");
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
-      checkbox.value = isLeapYear ? values.leap : values.normal;
-      label.appendChild(checkbox);
-      label.appendChild(document.createTextNode(month + (isLeapYear ? " (leap year)" : "")));
-      periodsDropdown.appendChild(label);
+      const option = document.createElement("option");
+      option.value = isLeapYear ? values.leap : values.normal;
+      option.text = month + (isLeapYear ? " (leap year)" : "");
+      periodSelect.add(option);
     }
   }
 }
