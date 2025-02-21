@@ -31,7 +31,8 @@ function updatePeriodOptions() {
   // Define the number of minutes in each month (non-leap year and leap year)
   const months = {
     "January": { normal: 44640, leap: 44640 },
-    "February": { normal: 40320, leap: 41760 },
+    "February Non-leap-year": { normal: 40320, leap: 40320 },
+    "February Leap-year": { normal: 41760, leap: 41760 },
     "March": { normal: 44640, leap: 44640 },
     "April": { normal: 43200, leap: 43200 },
     "May": { normal: 44640, leap: 44640 },
@@ -47,6 +48,7 @@ function updatePeriodOptions() {
   // Define the number of minutes in each quarter (non-leap year and leap year)
   const quarters = {
     "Q1": { normal: 129600, leap: 131040 },
+    "Q1 Leap-Year": { normal: 131040, leap: 131040 },
     "Q2": { normal: 131040, leap: 131040 },
     "Q3": { normal: 132480, leap: 132480 },
     "Q4": { normal: 132480, leap: 132480 }
