@@ -18,17 +18,13 @@ function calculate() {
 }
 
 function updatePeriodOptions() {
-  // Get the select element for periods
   const periodSelect = document.getElementById("period");
-  
-  // Clear the current options
   periodSelect.innerHTML = "";
-  
-  // Get the selected period type (Quarter or Month)
+
   const periodTypeSelect = document.getElementById("periodType");
   const periodType = periodTypeSelect.options[periodTypeSelect.selectedIndex].value;
-  
-  // Define the number of minutes in each month (non-leap year and leap year)
+
+  // Define period minutes
   const months = {
     "January": { normal: 44640, leap: 44640 },
     "February Non-leap-year": { normal: 40320, leap: 40320 },
@@ -44,8 +40,7 @@ function updatePeriodOptions() {
     "November": { normal: 43200, leap: 43200 },
     "December": { normal: 44640, leap: 44640 }
   };
-  
-  // Define the number of minutes in each quarter (non-leap year and leap year)
+
   const quarters = {
     "Q1": { normal: 129600, leap: 131040 },
     "Q1 Leap-Year": { normal: 131040, leap: 131040 },
@@ -53,12 +48,19 @@ function updatePeriodOptions() {
     "Q3": { normal: 132480, leap: 132480 },
     "Q4": { normal: 132480, leap: 132480 }
   };
-  
-  // Determine if the current year is a leap year
+
+  // Assume each week is 7 days
+  const weeks = {
+    "Week 1": 10080,
+    "Week 2": 10080,
+    "Week 3": 10080,
+    "Week 4": 10080,
+    "Week 5": 10080
+  };
+
   const currentYear = new Date().getFullYear();
   const isLeapYear = (currentYear % 4 === 0 && (currentYear % 100 !== 0 || currentYear % 400 === 0));
-  
-  // Add options based on the selected period type
+
   if (periodType === "Quarter") {
     for (const [quarter, values] of Object.entries(quarters)) {
       const option = document.createElement("option");
@@ -71,6 +73,13 @@ function updatePeriodOptions() {
       const option = document.createElement("option");
       option.value = isLeapYear ? values.leap : values.normal;
       option.text = month + (isLeapYear ? " (leap year)" : "");
+      periodSelect.add(option);
+    }
+  } else if (periodType === "Week") {
+    for (const [week, value] of Object.entries(weeks)) {
+      const option = document.createElement("option");
+      option.value = value;
+      option.text = week;
       periodSelect.add(option);
     }
   }
