@@ -24,7 +24,6 @@ function updatePeriodOptions() {
   const periodTypeSelect = document.getElementById("periodType");
   const periodType = periodTypeSelect.options[periodTypeSelect.selectedIndex].value;
 
-  // Define period minutes
   const months = {
     "January": { normal: 44640, leap: 44640 },
     "February Non-leap-year": { normal: 40320, leap: 40320 },
@@ -49,15 +48,6 @@ function updatePeriodOptions() {
     "Q4": { normal: 132480, leap: 132480 }
   };
 
-  // Assume each week is 7 days
-  const weeks = {
-    "Week 1": 10080,
-    "Week 2": 10080,
-    "Week 3": 10080,
-    "Week 4": 10080,
-    "Week 5": 10080
-  };
-
   const currentYear = new Date().getFullYear();
   const isLeapYear = (currentYear % 4 === 0 && (currentYear % 100 !== 0 || currentYear % 400 === 0));
 
@@ -76,14 +66,17 @@ function updatePeriodOptions() {
       periodSelect.add(option);
     }
   } else if (periodType === "Week") {
-    for (const [week, value] of Object.entries(weeks)) {
+    // Let's assume a year has 52 weeks (ISO years can have 52 or 53)
+    const NUM_WEEKS = 52;
+    const MINUTES_PER_WEEK = 7 * 24 * 60; // 10,080 minutes
+
+    for (let week = 1; week <= NUM_WEEKS; week++) {
       const option = document.createElement("option");
-      option.value = value;
-      option.text = week;
+      option.value = week * MINUTES_PER_WEEK;
+      option.text = `Week ${week}`;
       periodSelect.add(option);
     }
   }
 }
-
 // Initialize the period options on page load
 window.onload = updatePeriodOptions;
